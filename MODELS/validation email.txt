@@ -1,0 +1,93 @@
+
+Comment obtenir le dernier jour du mois avec les fonctions PHP
+Comment ajouter des jours à Date en PHP
+Comment supprimer tous les espaces d'une chaîne de caractères en PHP
+Comment créer une fonction PHP avec des retours multiples
+Comment formater correctement un nombre avec des zéros en tête de liste en PHP
+Comment déterminer la première et la dernière itération d'une boucle de foreach dans le PSP
+Comment créer un dossier s'il n'existe pas en PHP
+Comment calculer la différence entre deux dates à l'aide de PHP
+aclk sa=L&ai=CViJ02TxoYt-2HO2I…
+Ezoic
+report this ad
+ >HowTo>Howtos PHP>Valider l'email en PHP
+Valider l'email en PHP
+aclk sa=L&ai=CFo78KzNoYpmtBrOD…
+PHP PHP Email
+Créé: July-08, 2021
+   
+TABLE DES MATIÈRES
+1. Utilisez la fonction filter_var() et le FILTER_VALIDATE_EMAIL pour valider l’e-mail en PHP
+2. Utilisez les fonctions FILTER_VALIDATE_EMAIL, FILTER_SANITIZE_EMAIL et filter_var() pour valider l’e-mail en PHP
+3. Utilisez la fonction preg_match() pour valider l’e-mail selon l’expression régulière
+Nous allons introduire une méthode pour valider une adresse email en PHP à l’aide de la fonction filter_var() et de l’identifiant de nom de filtre FILTER_VALIDATE_EMAIL. La fonction filter_var() prend l’e-mail comme premier argument et le nom du filtre FILTER_VALIDATE_EMAIL pour valider l’e-mail par rapport à la syntaxe de la RFC 822. Cette méthode vérifie le format d’e-mail valide plutôt que l’e-mail valide.
+aclk sa=l&ai=Cc7GleTNoYu2AEoqL…
+Nous montrerons également une autre méthode pour valider les adresses e-mail en PHP à l’aide des identifiants de nom de filtre FILTER_SANITIZE_EMAIL et FILTER_VALIDATE_EMAIL avec la fonction fiter_var(). Cette méthode désinfecte d’abord l’adresse e-mail, puis valide l’adresse e-mail.
+Nous allons introduire une autre méthode pour valider le courrier électronique en PHP à l’aide de l’expression régulière. Cette méthode utilise la fonction preg_match() pour vérifier si l’e-mail est valide selon l’expression régulière fournie.
+Utilisez la fonction filter_var() et le FILTER_VALIDATE_EMAIL pour valider l’e-mail en PHP
+Nous pouvons utiliser la fonction filter_var() pour filtrer une variable avec un nom de filtre particulier. Le nom du filtre FILTER_VALIDATE_EMAIL spécifie que l’e-mail doit être vérifié. La fonction prend l’adresse e-mail sous forme de chaîne comme premier paramètre et l’ID de filtre spécifié ci-dessus comme deuxième paramètre. Ainsi, nous pouvons vérifier l’e-mail fourni s’il est valide. La fonction renvoie les données filtrées si la fonction réussit ou renvoie false. L’email est dit valide, pas dans le sens où l’email existe. L’identifiant de filtre valide l’e-mail par rapport à la syntaxe de la RFC 822. Nous pouvons tester la validation d’un e-mail en utilisant un e-mail valide et un e-mail invalide.
+Achat Nom De Domaine 1€/mois
+Annonce
+CONSULTER
+Par exemple, créez une fonction validateEmail() qui prend un paramètre $email. Utilisez la fonction filter_var() sur la variable $email et spécifiez l’ID de filtre FILTER_VALIDATE_EMAIL comme deuxième paramètre. Appliquez la condition if-else sur la fonction filter_var(). Dans le bloc if, affichez le message indiquant que l’email est valide, et dans la condition else, affichez que l’email est invalide. En dehors de la fonction, appelez la fonction deux fois. Dans le premier appel de fonction, fournissez l’argument peter.piper@iana.org et first.last@example.123 au deuxième appel.
+On peut supposer que l’adresse email fournie dans l’exemple est accessible depuis un formulaire utilisant la variable $_POST. La fonction de l’exemple ci-dessous est invoquée deux fois. La première invocation transmet une adresse e-mail valide et la seconde adresse un e-mail non valide. La deuxième adresse e-mail n’est pas valide car elle contient des chiffres dans le domaine de premier niveau. Le résultat est tout aussi évident.
+Exemple de code :
+#php 7.x
+<?php
+function validateEmail($email) {
+    if(filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        echo "{$email}: A valid email"."<br>";
+    }
+    else {
+        echo "{$email}: Not a valid email"."<br>";
+    }
+}
+validateEmail('peter.piper@iana.org');
+validateEmail('first.last@example.123');
+?>
+Production:
+phppeter.piper@iana.org: A valid email 
+first.last@example.123:Not a valid email
+Utilisez les fonctions FILTER_VALIDATE_EMAIL, FILTER_SANITIZE_EMAIL et filter_var() pour valider l’e-mail en PHP
+Nous pouvons utiliser l’identifiant de nom de filtre supplémentaire FILTER_SANITIZE_EMAIL dans la première méthode pour supprimer tous les caractères illégaux d’une adresse e-mail. L’identifiant du nom du filtre est le deuxième argument de la fonction filter_var(), où l’adresse e-mail est le premier argument. La fonction renvoie l’e-mail filtré. Nous pouvons à nouveau utiliser la fonction pour vérifier la validité de l’adresse e-mail après la désinfection. Pour cela, nous pouvons suivre la première méthode en utilisant l’identifiant de nom de filtre FILTER_VALIDATE_EMAIL.
+aclk sa=L&ai=CYoexLjRoYuWfJ_KF…
+ 
+Par exemple, créez une variable $email et stockez une adresse e-mail contenant des caractères illégaux. Stockez l’e-mail ram(.mugu)@exa//mple.org sous forme de chaîne dans la variable. Utilisez la fonction filter_var() sur la variable et utilisez l’identifiant FILTER_SANITIZE_EMAIL comme deuxième paramètre. Stockez la fonction sur la même variable $email. Ensuite, appliquez l’instruction if-else comme dans la première méthode. Cette fois, utilisez l’e-mail FILTER_VALIDATE_EMAIL comme nom de filtre dans la fonction. De même, affichez les messages.
+Une adresse e-mail avec un caractère illégal est prise dans l’exemple ci-dessous, et la fonction filter_var() filtre ces caractères et nettoie l’e-mail fourni. L’adresse e-mail fournie dans l’exemple contient des caractères illégaux tels que () et //. La fonction supprime d’abord ces caractères de l’e-mail, puis valide l’e-mail.
+Exemple de code :
+#php 7.x
+<?php
+$email = "ram(.mugu)@exa//mple.org";
+$email = filter_var($email, FILTER_SANITIZE_EMAIL);
+if(filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    echo "{$email}: A valid email"."<br>";
+}
+else{
+    echo "{$email}:Not a valid email"."<br>";
+}
+?>
+Production:
+ram.mugu@example.org: A valid email
+Utilisez la fonction preg_match() pour valider l’e-mail selon l’expression régulière
+On peut utiliser la fonction preg_match() pour valider l’adresse email en PHP. Cette méthode utilise l’expression régulière pour la règle de validation de l’e-mail. Nous pouvons créer nous-mêmes une expression régulière et définir les règles d’un e-mail valide. La fonction preg_match() prend deux paramètres dont le premier est l’expression régulière, et le second est l’email à vérifier. Nous pouvons utiliser l’opérateur ternaire pour vérifier la validité de l’e-mail avec la fonction.
+aclk sa=L&ai=CaKpKSjVoYuXCMZKi…
+Par exemple, créez deux variables, $email_first et $email_secon, et stockez deux adresses e-mail dans ces variables. Stockez d’abord un e-mail valide firstlast11@gmail.com et stockez un e-mail invalide firstlast11@gmail.com dans le second. Ecrivez une fonction validateEmail() qui prend un paramètre. Nommez le paramètre $email. A l’intérieur de la fonction, écrivez une expression régulière dans la variable $regex comme dans l’exemple de code. Écrivez ensuite un opérateur ternaire où la condition à vérifier est la fonction preg_match(). Prenez le $regex comme premier paramètre et le $email comme deuxième paramètre. Imprimez le message indiquant que l’e-mail est valide lorsque la condition est vraie et le message indiquant que l’e-mail est invalide lorsque la condition est fausse. Faites écho à toute l’expression ternaire. En dehors de la fonction, appelez deux fois la fonction validateEmail(). Utilisez la variable $email_first dans le premier appel de fonction et utilisez la variable $email_second dans le deuxième appel de fonction.
+Dans l’exemple ci-dessous, nous avons écrit une expression régulière qui crée une règle de validation de l’e-mail. Un e-mail valide contient un nom de destinataire, le symbole @, un domaine et un domaine de premier niveau. L’expression regex créée ci-dessus accepte le nom du destinataire sous forme de valeurs alphanumériques. L’alphabet est composé à la fois de majuscules et de minuscules. Il accepte également un point. L’email doit avoir le symbole @. Le domaine contient uniquement les alphabets. L’e-mail devrait alors avoir un point. Le domaine de premier niveau ne doit être composé que des alphabets et doit avoir une longueur de deux ou trois. L’expression regex est créée sur la base de cette règle. Le premier e-mail est valide car il satisfait à toutes les règles, mais le deuxième e-mail est invalide. Il n’est pas valide car il y a un numéro dans le nom de domaine et il n’y a pas de point avant le domaine de premier niveau.
+aclk sa=L&ai=Cg_zk4TxoYqn6H_KN…
+Exemple de code :
+# php 7.x
+<?php
+$email_first = 'firstlast11@gmail.com';
+$email_second ='firstlast@11gmail,com';
+function validateEmail($email) {
+    $regex = "/^([a-zA-Z0-9\.]+@+[a-zA-Z]+(\.)+[a-zA-Z]{2,3})$/";
+    echo preg_match($regex, $email) ? "The email is valid"."<br>" :"The email is       not valid";
+}
+validateEmail($email_first);
+validateEmail($email_second);
+?>
+Production:
+The email is valid 
+The email is not valid
+Utiliser La Valeur Par Défaut Dans Le Cas Du Commutateur PHP
+Échapper Aux Guillemets En PHP
