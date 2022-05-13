@@ -2,15 +2,14 @@
 
 class AdminC
 {
-    private $adminname;
+    private $firstname;
+    private $lastname;
     private $email;
     private $password;
+    private $repeatpassword;
     private $degree;
     private $status;
-    private $error;
-    private $nregex = "/([`a-zA-Z0-9])/";
-    private $eregex = "/^([a-z0-9\.]+@+[a-z]+(\.)+[a-z]{2,3})$/";
-    private $pregex = "/^([a-zA-Z0-9\@\$\%\_])/";
+    private $error = '';
 
     public function __CONSTRUCT(array $Donnees)
     {
@@ -30,13 +29,55 @@ class AdminC
         return;
     }
 
-    private function setAdminname($adminname)
+    private function setFirstname($firstname)
     {
-        if (empty($this->error)) {
-            if (preg_match($nregex, $adminname) && strlen($adminne) >= 2) {
-                $this->adminname = ucfirst(strtolower($adminname));
-            } else {
-                $this->error = "ERREUR : Nom d'utilisateur invalide !<br />(NB : Le nom ne doit être composé que des caractères alpha-numériques, et avoir une taille minimale de deux caractères.)";
+        $size = 2;
+
+        $tab = $this->StringVerify($firstname, $size);
+
+        if (is_array($tab)) {
+            foreach ($tab as $key => $value) {
+                switch ($tab[$key]) {
+                    case 'SYMBOL':
+                        if ($value === 1) {
+                            $this->error = 'ERREUR : Le prénom ne doit pas contenir des symboles.';
+                        }
+                        break;
+                    case 'SIZE':
+                        if ($value === 0) {
+                            $this->error = 'ERREUR : Prénom trop court.';
+                        }
+                }
+            }
+            if (empty($this->error)) {
+                $this->firstname = ucfirst(strtolower($firstname));
+            }
+        }
+        return;
+    }
+
+    private function setLastname($lastname)
+    {
+        $size = 2;
+
+        $tab = $this->StringVerify($lastname, $size);
+
+        if (is_array($tab)) {
+            foreach ($tab as $key => $value) {
+                switch ($tab[$key]) {
+                    case 'SYMBOL':
+                        if ($value === 1) {
+                            $this->error = 'ERREUR : Le nom ne doit pas contenir des symboles.';
+                        }
+                        break;
+                    case 'SIZE':
+                        if ($value === 0) {
+                            $this->error = 'ERREUR : Nom trop court.';
+                        }
+                }
+            }
+            if (empty($this->error)) {
+                $this->lastname = ucfirst(strtolower($lastname));
             }
         }
         return;
@@ -44,11 +85,26 @@ class AdminC
 
     private function setEmail($email)
     {
-        if (empty($this->error)) {
-            if (preg_match($eregex, $email)) {
-                $this->email = strtolower($email);
-            } else {
-                $this->error = "ERREUR : Format d'email invalide !";
+        $size = 10;
+
+        $tab = $this->StringVerify($email, $size);
+
+        if (is_array($tab)) {
+            foreach ($tab as $key => $value) {
+                switch ($tab[$key]) {
+                    case 'STRUCTURE':
+                        if ($value === 0) {
+                            $this->error = 'ERREUR : Adresse Email invalide.';
+                        }
+                        break;
+                    case 'SIZE':
+                        if ($value === 0) {
+                            $this->error = 'ERREUR : Adresse Email trop court.';
+                        }
+                }
+            }
+            if (empty($this->error)) {
+                $this->email = $email;
             }
         }
         return;
@@ -56,11 +112,51 @@ class AdminC
 
     private function setPassword($password)
     {
-        if (empty($this->error)) {
-            if (preg_match($pregex, $password) && strlen($password) >= 8) {
+        $size = 8;
+
+        $tab = $this->StringVerify($password, $size);
+
+        if (is_array($tab)) {
+            foreach ($tab as $key => $value) {
+                switch ($tab[$key]) {
+                    case 'UPPERCASE':
+                        if ($value === 0) {
+                            $this->error = 'ERREUR : Le mot de passe doit contenir au minimum une lettre majuscule.';
+                        }
+                        break;
+                    case 'LOWERCASE':
+                        if ($value === 0) {
+                            $this->error = 'ERREUR : Le mot de passe doit contenir au minimum une lettre minuscule.';
+                        }
+                        break;
+                    case 'NUMBER':
+                        if ($value === 0) {
+                            $this->error = 'ERREUR : Le mot de passe doit contenir au minimum un chiffre.';
+                        }
+                        break;
+                    case 'SYMBOL':
+                        if ($value === 0) {
+                            $this->error = 'ERREUR : Le mot de passe doit contenir au minimum un symbole.';
+                        }
+                        break;
+                    case 'SIZE':
+                        if ($value === 0) {
+                            $this->error = 'ERREUR : Le mot de passe doit avoir une taille minimale de 8 caractères.';
+                        }
+                }
+            }
+            if (empty($this->error)) {
                 $this->password = $password;
-            } else {
-                $this->error = "ERREUR : Le mot de passe est faible.";
+            }
+        }
+        return;
+    }
+
+    private function setRepeatPassword($repeatpassword)
+    {
+        if (empty($this->error)) {
+            if ($repeatpassword !== $this->password) {
+                $this->error = 'ERREUR : Les deux mots de passe ne sont pas identique.';
             }
         }
         return;
@@ -82,9 +178,14 @@ class AdminC
         return;
     }
 
-    public function getAdminname()
+    public function getFirstname()
     {
-        return $this->adminname;
+        return $this->firstname;
+    }
+
+    public function getLastname()
+    {
+        return $this->lastname;
     }
 
     public function getEmail()
@@ -110,5 +211,25 @@ class AdminC
     public function getError()
     {
         return $this->error;
+    }
+
+    private function StringVerify($str, $size)
+    {
+        if (empty($this->error)) {
+            $upc = preg_match('@[A-Z]@', $str);
+            $lwc = preg_match('@[a-z]@', $str);
+            $nbr = preg_match('@[0-9]@', $str);
+            $smb = preg_match('@[^\w]@', $str);
+            strlen($str) < $size ? $siz = 0 : $siz = 1;
+            $struct = preg_match('/^([a-z0-9\.]+@+[a-z]+(\.)+[a-z]{2,3})$/', $str);
+
+            $tab = array(
+                'UPPERCASE' >= $upc, 'LOWERCASE' >= $lwc, 'NUMBER' >= $nbr,
+                'SYMBOL' >= $smb, 'SIZE' >= $siz, 'STRUCTURE' >= $struct
+            );
+
+            return $tab;
+        }
+        return 0;
     }
 }

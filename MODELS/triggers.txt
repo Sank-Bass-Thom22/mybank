@@ -1,0 +1,49 @@
+Juan Sorroche 
+ 
+MySQL : Les Triggers
+Un trigger, comme son nom l’indique, déclenche automatiquement une action à la suite d’une requête effectuée sur une table.
+Afin d’illustrer l’utilisation de triggers, je vais partir d’un exemple simple : la mise à jour simultanée de tables de deux bases de données présentes sur un serveur MySQL.
+Sur mon serveur de base de données MySQL, j’ai deux bases : bdd1 et bdd2. Dans chacune de ces deux bases, j’ai une table ville qui contient la liste des villes de France et de leurs coordonnées géographiques : Id, Nom, Code postal, Latitude et Longitude.
+Par soucis de simplicité et d’efficacité, je souhaite que chaque insertion, mise à jour ou suppression effectuées dans la table ville de bdd1 soient automatiquement impactées sur la table ville de bdd2. C’est ici que les triggers entrent en jeu.
+Pour plus d’informations quant à la syntaxe des triggers, je vous invite à lire la documentation : https://dev.mysql.com/doc/refman/5.7/en/trigger-syntax.html
+Après un INSERT INTO (AFTER INSERT)
+DROP TRIGGER IF EXISTS `bdd1`.`ville_AFTER_INSERT`;
+
+DELIMITER $$
+USE `bdd1`$$
+
+CREATE DEFINER=`user`@`server` TRIGGER `bdd1`.`ville_AFTER_INSERT` AFTER INSERT ON `ville` FOR EACH ROW
+BEGIN
+INSERT INTO `bdd2`.`ville` (`id_ville`, `ville_nom`, `ville_cp`, `ville_lat`, `ville_lon`) SELECT NEW.`id_ville`, NEW.`ville_nom`, NEW.`ville_cp`, NEW.`ville_lat`, NEW.`ville_lon`;
+
+END$$
+DELIMITER ;
+Copy
+Après un UPDATE (AFTER UPDATE)
+DROP TRIGGER IF EXISTS `bdd1`.`ville_AFTER_UPDATE`;
+
+DELIMITER $$
+USE `bdd1`$$
+
+CREATE DEFINER=`user`@`server` TRIGGER `bdd1`.`ville_AFTER_UPDATE` AFTER UPDATE ON `ville` FOR EACH ROW
+BEGIN
+UPDATE `bdd2`.`ville` SET `ville_nom` = NEW.`ville_nom`, `ville_cp` = NEW.`ville_cp`, `ville_lat` = NEW.`ville_lat`, `ville_lon` = NEW.`ville_lon` WHERE `id_ville` = NEW.`id_ville`;
+
+END$$
+DELIMITER ;
+Copy
+Après un DELETE (AFTER DELETE)
+DROP TRIGGER IF EXISTS `bdd1`.`ville_AFTER_DELETE`;
+
+DELIMITER $$
+USE `bdd1`$$
+
+CREATE DEFINER=`user`@`server` TRIGGER `bdd1`.`ville_AFTER_DELETE` AFTER DELETE ON `ville` FOR EACH ROW
+BEGIN
+DELETE FROM `bdd2`.`ville` WHERE `id_ville` = OLD.`id_ville`;
+
+END$$
+DELIMITER ;
+Copy
+Et le tour est joué ! 🙂 Désormais, je n’ai plus qu’une seule des deux tables ville à administrer (celle de bdd1). La table de bdd2 sera automatiquement mise à jour grâce à ces triggers.
+N.B. : Si vous faites un dump de vos bases mais que vous ne souhaitez pas inclure les triggers, pensez à ajouter le paramètre --skip-triggers à votre commande.

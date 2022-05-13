@@ -12,13 +12,11 @@
     <title>Login</title>
 
     <!-- Custom fonts for this template-->
-    <link href="../VIEWS/SUPER/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link
-        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-        rel="stylesheet">
+    <link href="./VIEWS/SUPER/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
     <!-- Custom styles for this template-->
-    <link href="../VIEWS/SUPER/css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="./VIEWS/SUPER/css/sb-admin-2.min.css" rel="stylesheet">
 
 </head>
 
@@ -41,15 +39,19 @@
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-4">My Bank!</h1>
                                     </div>
-                                    <form class="user">
+                                    <div class="text-danger" style="text-align:center;">
+                                        <?php
+                                        if (isset($_GET['message'])) {
+                                            echo $_GET['message'];
+                                        }
+                                        ?>
+                                    </div>
+                                    <form class="user" method="POST" action="CONTROLLERS/authentication.php">
                                         <div class="form-group">
-                                            <input type="email" class="form-control form-control-user"
-                                                id="exampleInputEmail" aria-describedby="emailHelp"
-                                                placeholder="Entrer votre adresse Email : ">
+                                            <input type="email" class="form-control form-control-user" id="exampleInputEmail" aria-describedby="emailHelp" name="Donnees[email]" placeholder="Entrer votre adresse Email : ">
                                         </div>
                                         <div class="form-group">
-                                            <input type="password" class="form-control form-control-user"
-                                                id="exampleInputPassword" placeholder="Entrer votre mot de passe : ">
+                                            <input type="password" class="form-control form-control-user" id="exampleInputPassword" name="Donnees[password]" placeholder="Entrer votre mot de passe : ">
                                         </div>
                                         <div class="form-group">
                                             <div class="custom-control custom-checkbox small">
@@ -59,7 +61,7 @@
                                             </div>
                                         </div>
                                         <button type="submit" name="sign_in" class="btn btn-primary btn-user btn-block">
-                                            Login
+                                            Se connecter
                                         </button>
                                         <!--
                                         <hr>
@@ -93,14 +95,14 @@
     </div>
 
     <!-- Bootstrap core JavaScript-->
-    <script src="../VIEWS/SUPER/vendor/jquery/jquery.min.js"></script>
-    <script src="../VIEWS/SUPER/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="./VIEWS/SUPER/vendor/jquery/jquery.min.js"></script>
+    <script src="./VIEWS/SUPER/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <!-- Core plugin JavaScript-->
-    <script src="../VIEWS/SUPER/vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="./VIEWS/SUPER/vendor/jquery-easing/jquery.easing.min.js"></script>
 
     <!-- Custom scripts for all pages-->
-    <script src="../VIEWS/SUPER/js/sb-admin-2.min.js"></script>
+    <script src="./VIEWS/SUPER/js/sb-admin-2.min.js"></script>
 
 </body>
 

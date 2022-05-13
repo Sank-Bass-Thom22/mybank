@@ -1,0 +1,30 @@
+if(preg_match((?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$), $_POST['password']):
+
+echo 'matched';
+
+else:
+
+echo 'not matched';
+
+endif;
+
+/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/
+
+$uppercase = preg_match('@[A-Z]@', $password);
+$lowercase = preg_match('@[a-z]@', $password);
+$number    = preg_match('@[0-9]@', $password);
+$specialChars = preg_match('@[^\w]@', $password);
+if(!$uppercase || !$lowercase || !$number || strlen($password) < 8) {
+  // tell the user something went wrong
+
+if (preg_match("/[^\S*(?=\S{8,})(?=\S*[az])(?=\S*[AZ])(?=\S*[\d ])\S*$]/",$name)){ OK} else{error}
+
+^\S*(?=\S{8,})(?=\S*[a-z])(?=\S*[A-Z])(?=\S*[\d])\S*$
+• ^: ancré au début de la chaîne
+• \S*: n'importe quel ensemble de caractères
+• (?=\S{8,}): d'au moins longueur 8
+• (?=\S*[a-z]): contenant au moins une lettre minuscule
+• (?=\S*[A-Z]): et au moins une lettre majuscule
+• (?=\S*[\d]): et au moins un chiffre
+• $: ancré au bout de la corde
+Pour inclure des caractères spéciaux: (?=\S*[\W])

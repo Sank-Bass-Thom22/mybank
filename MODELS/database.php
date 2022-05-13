@@ -2,18 +2,19 @@
 
 class Connection
 {
-    private $host = "localhost" ; private $dbname = "mybank" ;
-    private $user = "root" ; private $password = "" ;
+    private $host = 'localhost';
+    private $dbname = 'mybank';
+    private $user = 'root';
+    private $password = '';
 
     protected function DBconnector()
     {
-        try
-        {
-            $db = new PDO('mysqlhost=' . $this->host . ';dbname=' . $this->dbname . ';Charset=UTF-8', $this->user, $this->password) ;
-            return $db ;
-        } catch(Exception $e) {
-            die("ERREUR : Connexion non établie. " . $e->getMessage()) ;
-            exit ;
+        try {
+            $db = new PDO('mysql:host=' . $this->host . ';dbname=' . $this->dbname . ';Charset=UTF-8', $this->user, $this->password);
+            return $db;
+        } catch (Exception $e) {
+            die("ERREUR : Connexion non établie. " . $e->getMessage());
+            exit;
         }
     }
 }
