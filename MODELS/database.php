@@ -10,7 +10,7 @@ class Connection
     protected function DBconnector()
     {
         try {
-            $db = new PDO('mysql:host=' . $this->host . ';dbname=' . $this->dbname . ';Charset=UTF-8', $this->user, $this->password);
+            $db = new PDO('mysql:host=' . .$this->host . ';dbname=' . $this->dbname . ';Charset=UTF-8', $this->user, $this->password);
             return $db;
         } catch (Exception $e) {
             die("ERREUR : Connexion non établie. " . $e->getMessage());

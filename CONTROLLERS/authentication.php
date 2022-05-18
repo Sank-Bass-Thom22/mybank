@@ -24,8 +24,8 @@ if (isset($_POST['sign_in'])) {
         {
             if (password_verify($row['password'], PASSWORD_BCRYPT))
             {
-                $_SESSION['firstname'] = $row['firstname'];
-                $_SESSION['lastname'] = $row['lastname'];
+                $_SESSION['admFirstname'] = $row['firstname'];
+                $_SESSION['admLastname'] = $row['lastname'];
                 if ($row['degree'] == 1)
                 {
                     header('LOCATION: ../VIEWS/SUPER/index.php');
@@ -54,7 +54,7 @@ if (isset($_POST['sign_in'])) {
         header('LOCATION: ../VIEWS/SUPER/register.php?message=' . $message);
     } else {
         $adminM = new AdminM();
-        $code = $adminM->Sign_u.p($adminC);
+        $code = $adminM->Sign_up($adminC);
 
         switch ($code)
         {
@@ -119,4 +119,9 @@ if (isset($_POST['sign_in'])) {
     <?php $content = ob_get_clean(); ?>
 
     <?php
-} else {}
+} else {
+    $_SESSION = array();
+    session_unset();
+    session_destroy();
+    header('LOCATION: ../index.php');
+}

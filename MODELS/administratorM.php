@@ -9,10 +9,10 @@ class AdminM extends Connection
         $db = $this->DBconnector();
         $status = "UNLOCK";
 
-        $sql = "SELECT firstname, lastname, password, degree FROM `administrator` WHERE email = :email AND status = :status ORDER BY id_admin ASC";
+        $sql = "SELECT firstname, lastname, password, degree FROM administrator WHERE email = :email AND status = :status ORDER BY id_admin ASC";
         $query = $db->prepare($sql);
-        $query->bindParam(':email', $adminC->getEmail());
-        $query->bindParam(':status', $status);
+        $query->bindValue(':email', $adminC->getEmail());
+        $query->bindValue(':status', $status);
         $query->execute();
 
         $row = $query->fetch();
@@ -23,26 +23,26 @@ class AdminM extends Connection
     {
         $db = $this->DBconnector();
 
-        $sql = "SELECT email FROM `administrator` WHERE email = :email";
+        $sql = "SELECT email FROM administrator WHERE email = :email";
         $query = $db->prepare($sql);
-        $query->bindParam(':email', $adminC->getEmail());
+        $query->bindValue(':email', $adminC->getEmail());
         $query->execute();
 
         $row = $query->fetch();
 
-        if (empty($row)) {
-            $sql = "INSERT INTO `administrator`(firstname, lastname, email, password, degree, status)
+        if (!$row && $query->rowCount() == 0) {
+            $sql = "INSERT INTO administrator(firstname, lastname, email, password, degree, status)
             VALUES(:firstname, :lastname, :email, :password, :degree, :status)";
             $query = $db->prepare($sql);
-            $query->bindParam(':firstname', $adminC->getFirstname());
-            $query->bindParam(':lastname', $adminC->getLastname());
-            $query->bindParam(':email', $adminC->getEmail());
-            $query->bindParam(':password', password_hash($adminC->getPassword(), PASSWORD_BCRYPT));
-            $query->bindParam(':degree', $adminC->getDegree());
-            $query->bindParam(':status', $adminC->getStatus());
+            $query->bindValue(':firstname', $adminC->getFirstname());
+            $query->bindValue(':lastname', $adminC->getLastname());
+            $query->bindValue(':email', $adminC->getEmail());
+            $query->bindValue(':password', password_hash($adminC->getPassword(), PASSWORD_BCRYPT));
+            $query->bindValue(':degree', $adminC->getDegree());
+            $query->bindValue(':status', $adminC->getStatus());
             $query->execute();
 
-            if (!empty($query)) {
+            if ($query && $query->rowCount()) {
                 $code = 100;
             } else {
                 $code = 200;
@@ -57,7 +57,7 @@ class AdminM extends Connection
     {
         $db = $this->DBconnector();
 
-        $sql = "SELECT id_admin, firstname, lastname, email FROM `administrator` ORDER BY adminname ASC";
+        $sql = "SELECT id_admin, firstname, lastname, email FROM administrator ORDER BY adminname ASC";
         $query = $db->prepare($sql);
         $query->execute();
 
@@ -68,9 +68,9 @@ class AdminM extends Connection
     {
         $db = $this->DBconnector();
 
-        $sql = "SELECT * FROM `administrator` WHERE id_admin = :id_admin";
+        $sql = "SELECT * FROM administrator WHERE id_admin = :id_admin";
         $query = $db->prepare($sql);
-        $query->bindParam(':id_admin', $id_admin);
+        $query->bindValue(':id_admin', $id_admin);
         $query->execute();
 
         return $query;
@@ -80,10 +80,10 @@ class AdminM extends Connection
     {
         $db = $this->DBconnector();
 
-        $sql = "UPDATE `administrator` SET password = :password WHERE email = :email";
+        $sql = "UPDATE administrator SET password = :password WHERE email = :email";
         $query = $db->prepare($sql);
-        $query->bindParam(':password', password_hash($adminC->getPassword(), PASSWORD_BCRYPT));
-        $query->bindParam(':email', $adminC->getEmail());
+        $query->bindValue(':password', password_hash($adminC->getPassword(), PASSWORD_BCRYPT));
+        $query->bindValue(':email', $adminC->getEmail());
         $query->execute();
 
         if (!empty($query)) {
@@ -98,21 +98,21 @@ class AdminM extends Connection
     {
         $db = $this->DBconnector();
 
-        $sql = "SELECT email FROM `administrator` WHERE email = :email";
+        $sql = "SELECT email FROM administrator WHERE email = :email";
         $query = $db->prepare($sql);
-        $query->bindParam(':email', $adminC->getEmail());
+        $query->bindValue(':email', $adminC->getEmail());
         $query->execute();
 
         $row = $query->fetch();
 
         if (!empty($row)) {
-            $sql = "UPDATE `administrator` SET firstname = :firstname AND lastname = :lastname AND email = :email AND status = :status WHERE id_admin = :id_admin";
+            $sql = "UPDATE administrator SET firstname = :firstname AND lastname = :lastname AND email = :email AND status = :status WHERE id_admin = :id_admin";
             $query = $db->prepare($sql);
-            $query->bindParam(':firstname', $adminC->getFirstname());
-            $query->bindParam(':lastname', $adminC->getLastname());
-            $query->bindParam(':email', $adminC->getEmail());
-            $query->bindParam(':status', $adminC->getStatus());
-            $query->bindParam(':id_admin', $id_admin);
+            $query->bindValue(':firstname', $adminC->getFirstname());
+            $query->bindValue(':lastname', $adminC->getLastname());
+            $query->bindValue(':email', $adminC->getEmail());
+            $query->bindValue(':status', $adminC->getStatus());
+            $query->bindValue(':id_admin', $id_admin);
             $query->execute();
 
             if (!empty($query)) {

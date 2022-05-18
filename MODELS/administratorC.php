@@ -7,8 +7,8 @@ class AdminC
     private $email;
     private $password;
     private $repeatpassword;
-    private $degree;
-    private $status;
+    private $degree = 1;
+    private $status = 'UNLOCK';
     private $error = '';
 
     public function __CONSTRUCT(array $Donnees)
@@ -22,7 +22,7 @@ class AdminC
         foreach ($Donnees as $key => $value) {
             $method = "set" . ucfirst(strtolower($key));
 
-            if (method_exists($this, $method)) {
+            if (method_exists($this, $method)) {.
                 $this->$method($value);
             }
         }
@@ -162,6 +162,7 @@ class AdminC
         return;
     }
 
+    /* ---
     private function setDegree($degree)
     {
         if (empty($this->error)) {
@@ -169,7 +170,9 @@ class AdminC
         }
         return;
     }
+    */
 
+    /* ---
     private function setStatus($status)
     {
         if (empty($this->error)) {
@@ -177,6 +180,7 @@ class AdminC
         }
         return;
     }
+    */
 
     public function getFirstname()
     {
